@@ -5,13 +5,14 @@ import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import ListItemText from '@mui/material/ListItemText';
-import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import Message from './Message';
 import SendMessageForm from './SendMessageForm';
 
 const drawerWidth = 25;
 const indent = 2;
 
-function Messenger() {
+function Messenger(props) {
     return (
         <Box sx={{ display: 'flex' }}>
             <Drawer
@@ -34,9 +35,14 @@ function Messenger() {
                     ))}
                 </List>
             </Drawer>
-            <Box sx={{ p: 3 }}>
-                <Typography paragraph>abcde</Typography>
-            </Box>
+            <Grid container sx={{ m: 3 }}>
+                <Message is_incoming={true} text={'Received message'} />
+                <Message is_incoming={true} text={'Received message'} />
+                <Message is_incoming={false} text={'Sent message'} />
+                <Message is_incoming={true} text={'Received message'} />
+                <Message is_incoming={false} text={'Sent message'} />
+                <Message is_incoming={false} text={'Sent message'} />
+            </Grid>
             <Box sx={{
                 position: 'fixed',
                 left: `${drawerWidth + indent}%`,

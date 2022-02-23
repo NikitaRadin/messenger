@@ -3,7 +3,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import SendIcon from '@mui/icons-material/Send';
 
-function SendMessageForm() {
+function SendMessageForm(props) {
     return (
         <Box
             component='form'
