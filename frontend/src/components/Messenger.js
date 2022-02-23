@@ -6,18 +6,20 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
+import SendMessageForm from './SendMessageForm';
 
-const drawerWidth = '25%';
+const drawerWidth = 25;
+const indent = 2;
 
-function PermanentDrawerLeft() {
+function Messenger() {
     return (
         <Box sx={{ display: 'flex' }}>
             <Drawer
                 variant="permanent"
                 sx={{
-                    width: drawerWidth,
+                    width: `${drawerWidth}%`,
                     '& .MuiDrawer-paper': {
-                        width: drawerWidth
+                        width: `${drawerWidth}%`
                     }
                 }}
             >
@@ -35,8 +37,16 @@ function PermanentDrawerLeft() {
             <Box sx={{ p: 3 }}>
                 <Typography paragraph>abcde</Typography>
             </Box>
+            <Box sx={{
+                position: 'fixed',
+                left: `${drawerWidth + indent}%`,
+                right: `${indent}%`,
+                bottom: `${indent}%`
+            }}>
+                <SendMessageForm />
+            </Box>
         </Box>
     );
 };
 
-export default PermanentDrawerLeft;
+export default Messenger;
