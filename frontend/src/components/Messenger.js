@@ -1,3 +1,4 @@
+import React from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -13,6 +14,17 @@ const drawerWidth = 25;
 const indent = 2;
 
 function Messenger(props) {
+    const [messages, setMessages] = React.useState([]);
+
+    function sendMessage(message) {
+        const updatedMessages = [...messages];
+        updatedMessages.push({
+            is_incoming: false,
+            text: message
+        });
+        setMessages(updatedMessages);
+    };
+
     return (
         <Box sx={{ display: 'flex' }}>
             <Drawer
@@ -36,12 +48,9 @@ function Messenger(props) {
                 </List>
             </Drawer>
             <Grid container sx={{ m: 3 }}>
-                <Message is_incoming={true} text={'Received message'} />
-                <Message is_incoming={true} text={'Received message'} />
-                <Message is_incoming={false} text={'Sent message'} />
-                <Message is_incoming={true} text={'Received message'} />
-                <Message is_incoming={false} text={'Sent message'} />
-                <Message is_incoming={false} text={'Sent message'} />
+                {messages.map(
+                    (message) => <Message is_incoming={message.is_incoming} text={message.text} />
+                )}
             </Grid>
             <Box sx={{
                 position: 'fixed',
@@ -49,7 +58,7 @@ function Messenger(props) {
                 right: `${indent}%`,
                 bottom: `${indent}%`
             }}>
-                <SendMessageForm />
+                <SendMessageForm sendMessage={sendMessage} />
             </Box>
         </Box>
     );
