@@ -6,7 +6,9 @@ import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import ListItemText from '@mui/material/ListItemText';
-import Grid from '@mui/material/Grid';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
 import Message from './Message';
 import SendMessageForm from './SendMessageForm';
 
@@ -47,11 +49,24 @@ function Messenger(props) {
                     ))}
                 </List>
             </Drawer>
-            <Grid container sx={{ m: 3 }}>
+            <AppBar sx={{
+                position: 'fixed',
+                left: `${drawerWidth}%`
+            }}>
+                <Toolbar>
+                    <Typography variant="h6">abcde</Typography>
+                </Toolbar>
+            </AppBar>
+            <Box sx={{
+                flexGrow: 1,
+                mx: 3,
+                my: 2
+            }}>
+                <Toolbar />
                 {messages.map(
                     (message) => <Message is_incoming={message.is_incoming} text={message.text} />
                 )}
-            </Grid>
+            </Box>
             <Box sx={{
                 position: 'fixed',
                 left: `${drawerWidth + indent}%`,
