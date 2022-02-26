@@ -28,7 +28,7 @@ function SendMessageForm(props) {
                 fullWidth
                 multiline
                 maxRows={12}
-                label="Enter a message"
+                placeholder='Enter a message'
                 value={message}
                 onChange={(event) => setMessage(event.target.value)}
                 sx={{ mr: 1 }}

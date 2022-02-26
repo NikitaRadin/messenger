@@ -1,6 +1,7 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
+import SearchForm from './SearchForm';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
@@ -35,6 +36,7 @@ function Messenger(props) {
                     }
                 }}
             >
+                <SearchForm />
                 <List>
                     {['Name1 Surname1', 'Name2 Surname2', 'Name3 Surname3', 'Name4 Surname4'].map((conversation, index) => (
                         <ListItem button onClick={(event) => setConversation(conversation)} key={conversation}>
