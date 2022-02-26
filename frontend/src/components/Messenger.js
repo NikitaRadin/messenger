@@ -6,16 +6,13 @@ import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import ListItemText from '@mui/material/ListItemText';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Message from './Message';
-import SendMessageForm from './SendMessageForm';
+import Conversation from './Conversation';
 
 const drawerWidth = 25;
 const indent = 2;
 
 function Messenger(props) {
+    const [conversation, setConversation] = React.useState('');
     const [messages, setMessages] = React.useState([]);
 
     function sendMessage(message) {
@@ -40,7 +37,7 @@ function Messenger(props) {
             >
                 <List>
                     {['Name1 Surname1', 'Name2 Surname2', 'Name3 Surname3', 'Name4 Surname4'].map((conversation, index) => (
-                        <ListItem button key={conversation}>
+                        <ListItem button onClick={(event) => setConversation(conversation)} key={conversation}>
                             <ListItemAvatar>
                                 <Avatar>NS</Avatar>
                             </ListItemAvatar>
@@ -49,32 +46,17 @@ function Messenger(props) {
                     ))}
                 </List>
             </Drawer>
-            <AppBar sx={{
-                position: 'fixed',
-                left: `${drawerWidth}%`
-            }}>
-                <Toolbar>
-                    <Typography variant="h6">abcde</Typography>
-                </Toolbar>
-            </AppBar>
-            <Box sx={{
-                flexGrow: 1,
-                mx: 3,
-                my: 2
-            }}>
-                <Toolbar />
-                {messages.map(
-                    (message) => <Message is_incoming={message.is_incoming} text={message.text} />
-                )}
-            </Box>
-            <Box sx={{
-                position: 'fixed',
-                left: `${drawerWidth + indent}%`,
-                right: `${indent}%`,
-                bottom: `${indent}%`
-            }}>
-                <SendMessageForm sendMessage={sendMessage} />
-            </Box>
+            {
+                conversation ?
+                    <Conversation
+                        left={drawerWidth}
+                        conversation={conversation}
+                        messages={messages}
+                        indent={indent}
+                        sendMessage={sendMessage}
+                    /> :
+                    null
+            }
         </Box>
     );
 };
