@@ -2,11 +2,7 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import SearchForm from './SearchForm';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Avatar from '@mui/material/Avatar';
-import ListItemText from '@mui/material/ListItemText';
+import ConversationUserList from './ConversationUserList';
 import Conversation from './Conversation';
 
 const drawerWidth = 25;
@@ -37,16 +33,10 @@ function Messenger(props) {
                 }}
             >
                 <SearchForm />
-                <List>
-                    {['Name1 Surname1', 'Name2 Surname2', 'Name3 Surname3', 'Name4 Surname4'].map((conversation, index) => (
-                        <ListItem button onClick={(event) => setConversation(conversation)} key={conversation}>
-                            <ListItemAvatar>
-                                <Avatar>NS</Avatar>
-                            </ListItemAvatar>
-                            <ListItemText primary={conversation} />
-                        </ListItem>
-                    ))}
-                </List>
+                <ConversationUserList
+                    conversationUserList={['Name1 Surname1', 'Name2 Surname2', 'Name3 Surname3', 'Name4 Surname4']}
+                    setConversation={setConversation}
+                />
             </Drawer>
             {
                 conversation ?
