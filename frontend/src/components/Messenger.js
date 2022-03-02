@@ -1,8 +1,8 @@
 import React from 'react';
 import Box from '@mui/material/Box';
+import CssBaseline from '@mui/material/CssBaseline';
 import Drawer from '@mui/material/Drawer';
-import SearchForm from './SearchForm';
-import ConversationUserList from './ConversationUserList';
+import ControlPanel from './ControlPanel';
 import Conversation from './Conversation';
 
 const drawerWidth = 25;
@@ -23,6 +23,7 @@ function Messenger(props) {
 
     return (
         <Box sx={{ display: 'flex' }}>
+            <CssBaseline />
             <Drawer
                 variant="permanent"
                 sx={{
@@ -32,11 +33,7 @@ function Messenger(props) {
                     }
                 }}
             >
-                <SearchForm />
-                <ConversationUserList
-                    conversationUserList={['Name1 Surname1', 'Name2 Surname2', 'Name3 Surname3', 'Name4 Surname4']}
-                    setConversation={setConversation}
-                />
+                <ControlPanel setConversation={setConversation} />
             </Drawer>
             {
                 conversation ?
