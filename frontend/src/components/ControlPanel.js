@@ -27,6 +27,13 @@ function ControlPanel(props) {
         };
     };
 
+    function setConversation(conversation) {
+        props.setConversation(conversation);
+        setSearchText('');
+        setFoundConversations([]);
+        setFoundUsers([]);
+    };
+
     const Aligner = styled('div')(({ theme }) => ({
         width: '100%',
         ...theme.typography.body2,
@@ -60,7 +67,7 @@ function ControlPanel(props) {
                 !searchText ?
                     <ConversationUserList
                         conversationUserList={['Name1 Surname1', 'Name2 Surname2', 'Name3 Surname3', 'Name4 Surname4']}
-                        setConversation={props.setConversation}
+                        setConversation={setConversation}
                     /> :
                     <>
                         <Aligner>
@@ -70,7 +77,7 @@ function ControlPanel(props) {
                         </Aligner>
                         <ConversationUserList
                             conversationUserList={foundConversations}
-                            setConversation={props.setConversation}
+                            setConversation={setConversation}
                         />
                         <Aligner>
                             <Divider textAlign="left">
@@ -79,7 +86,7 @@ function ControlPanel(props) {
                         </Aligner>
                         <ConversationUserList
                             conversationUserList={foundUsers}
-                            setConversation={props.setConversation}
+                            setConversation={setConversation}
                         />
                     </>
             }
