@@ -23,7 +23,7 @@ def set_and_send_code(user, code):
     if not validate_code(code):
         raise CodeValidationException
     encrypted_code = make_password(code)
-    user.authenticationcode.encrypted_code = encrypted_code
+    user.authenticationcode.encrypted = encrypted_code
     user.authenticationcode.save()
     email_message = EmailMessage(subject='Authentication code',
                                  body=f'Authentication code: {code}',
@@ -32,9 +32,9 @@ def set_and_send_code(user, code):
 
 
 def check_code(user, code):
-    encrypted_code = user.authenticationcode.encrypted_code
+    encrypted_code = user.authenticationcode.encrypted
     if check_password(code, encrypted_code):
-        user.authenticationcode.encrypted_code = ''
+        user.authenticationcode.encrypted = ''
         user.authenticationcode.save()
         return True
     return False
