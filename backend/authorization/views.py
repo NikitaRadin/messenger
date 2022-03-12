@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-from rest_api.serializers import UserSerializer, AuthenticationCodeSerializer
-from rest_api.models import AuthenticationCode, User
+from authorization.serializers import UserSerializer, AuthenticationCodeSerializer
+from authorization.models import AuthenticationCode, User
 from . import authentication
 from rest_framework.response import Response
 from rest_framework import status
