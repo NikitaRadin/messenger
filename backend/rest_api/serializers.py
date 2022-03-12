@@ -9,5 +9,5 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class AuthenticationCodeSerializer(serializers.Serializer):
-    user_id = serializers.BigIntegerField(min_value=1)
+    user_id = serializers.IntegerField(min_value=1)
     code = serializers.RegexField(regex='^[0-9]{6}$')
