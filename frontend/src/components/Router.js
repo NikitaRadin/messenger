@@ -10,7 +10,7 @@ function Router(props) {
         <BrowserRouter>
             <Routes>
                 <Route path="/messenger" element={token ? <Messenger /> : <Navigate to='/login' />} />
-                <Route path="/login" element={!token ? <Login /> : <Navigate to='/messenger' />} />
+                <Route path="/login" element={!token ? <Login setToken={setToken} /> : <Navigate to='/messenger' />} />
                 {/*<Route path="*" element={</>} />*/}
             </Routes>
         </BrowserRouter>

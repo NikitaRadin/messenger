@@ -6,14 +6,19 @@ import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
+import { useNavigate } from 'react-router-dom';
 
-const steps = ['Enter your username', 'Enter your authentication code'];
-
-function Login() {
+function Login(props) {
     const [activeStep, setActiveStep] = React.useState(0);
     const [username, setUsername] = React.useState('');
     const [userId, setUserId] = React.useState(0);
     const [alertOpen, setAlertOpen] = React.useState(true);
+    const [authenticationCode, setAuthenticationCode] = React.useState('');
+
+    const navigate = useNavigate();
+
+    const steps = ['Enter your username', 'Enter your authentication code'];
+    const stepHandlers = [sendUsername, sendAuthenticationCode];
 
     async function sendUsername() {
         await fetch('http://127.0.0.1:8000/login/', {
@@ -30,7 +35,7 @@ function Login() {
                     setActiveStep(activeStep + 1);
                 },
                 (error) => { }
-        );
+            );
     };
 
     function closeAlert() {
@@ -39,7 +44,27 @@ function Login() {
 
     function goBack() { };
 
-    function sendAuthenticationCode() { };
+    async function sendAuthenticationCode() {
+        await fetch('http://127.0.0.1:8000/login/', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                'user_id': userId,
+                'code': authenticationCode
+            })
+        })
+            .then(response => response.json())
+            .then(
+                (response) => {
+                    props.setToken(response.token);
+                    setActiveStep(activeStep + 1);
+                    navigate('/messenger');
+                },
+                (error) => { }
+            );
+    };
 
     return (
         <Box sx={{ mt: 30 }}>
@@ -62,13 +87,24 @@ function Login() {
                     alignItems: 'center'
                 }}
             >
-                <TextField
-                    size='small'
-                    placeholder='Enter your username'
-                    value={username}
-                    onChange={(event) => setUsername(event.target.value)}
-                    sx={{ my: 5 }}
-                />
+                {activeStep === 0 &&
+                    <TextField
+                        size='small'
+                        placeholder='Enter your username'
+                        value={username}
+                        onChange={(event) => setUsername(event.target.value)}
+                        sx={{ my: 5 }}
+                    />
+                }
+                {activeStep === 1 &&
+                    <TextField
+                        size='small'
+                        placeholder='Enter your authentication code'
+                        value={authenticationCode}
+                        onChange={(event) => setAuthenticationCode(event.target.value)}
+                        sx={{ my: 5 }}
+                    />
+                }
             </Container>
             <Container maxWidth="md">
                 <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
@@ -81,7 +117,7 @@ function Login() {
                         Go back
                     </Button>
                     <Box sx={{ flex: '1 1 auto' }} />
-                    <Button onClick={sendUsername}>Send</Button>
+                    <Button onClick={stepHandlers[activeStep]}>Send</Button>
                 </Box>
             </Container>
         </Box>
