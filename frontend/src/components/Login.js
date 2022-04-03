@@ -15,6 +15,9 @@ function Login(props) {
     const [alertOpen, setAlertOpen] = React.useState(true);
     const [authenticationCode, setAuthenticationCode] = React.useState('');
 
+    const [sendUsernameError, setSendUsernameError] = React.useState('');
+    const [sendAuthenticationCodeError, setSendAuthenticationCodeError] = React.useState('');
+
     const navigate = useNavigate();
 
     const steps = ['Enter your username', 'Enter your authentication code'];
@@ -28,14 +31,18 @@ function Login(props) {
             },
             body: JSON.stringify({ 'username': username })
         })
-            .then(response => response.json())
-            .then(
-                (response) => {
-                    setUserId(response.user_id);
-                    setActiveStep(activeStep + 1);
-                },
-                (error) => { }
-            );
+            .then(response => {
+                if (response.status === 200) {
+                    response.json().then(jsonResponse => {
+                        setUserId(jsonResponse.user_id);
+                        setActiveStep(activeStep + 1);
+                    });
+                }
+                else {
+                    setSendUsernameError(`User ${username} not found`);
+                    setUsername('');
+                };
+            });
     };
 
     function closeAlert() {
@@ -55,15 +62,19 @@ function Login(props) {
                 'code': authenticationCode
             })
         })
-            .then(response => response.json())
-            .then(
-                (response) => {
-                    props.setToken(response.token);
-                    setActiveStep(activeStep + 1);
-                    navigate('/messenger');
-                },
-                (error) => { }
-            );
+            .then(response => {
+                if (response.status === 200) {
+                    response.json().then(jsonResponse => {
+                        props.setToken(jsonResponse.token);
+                        setActiveStep(activeStep + 1);
+                        navigate('/messenger');
+                    });
+                }
+                else {
+                    setSendAuthenticationCodeError('Invalid authentication code');
+                    setAuthenticationCode('');
+                };
+            });
     };
 
     return (
@@ -93,6 +104,8 @@ function Login(props) {
                         placeholder='Enter your username'
                         value={username}
                         onChange={(event) => setUsername(event.target.value)}
+                        error={sendUsernameError !== ''}
+                        helperText={sendUsernameError}
                         sx={{ my: 5 }}
                     />
                 }
@@ -102,6 +115,8 @@ function Login(props) {
                         placeholder='Enter your authentication code'
                         value={authenticationCode}
                         onChange={(event) => setAuthenticationCode(event.target.value)}
+                        error={sendAuthenticationCodeError !== ''}
+                        helperText={sendAuthenticationCodeError}
                         sx={{ my: 5 }}
                     />
                 }
