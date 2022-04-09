@@ -65,7 +65,7 @@ function Login(props) {
             .then(response => {
                 if (response.status === 200) {
                     response.json().then(jsonResponse => {
-                        props.setToken(jsonResponse.token);
+                        props.saveToken(jsonResponse.token);
                         setActiveStep(activeStep + 1);
                         navigate('/messenger');
                     });
