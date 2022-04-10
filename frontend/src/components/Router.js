@@ -18,13 +18,18 @@ function Router(props) {
             });
     });
 
+    function authenticate(token) {
+        localStorage.setItem('token', token);
+        setUserStatus('Authenticated');
+    };
+
     return (
         userStatus !== 'Unknown' ?
             <BrowserRouter>
                 <Routes>
                     <Route path="/messenger" element={userStatus === 'Authenticated' ? <Messenger /> : <Navigate to='/login' />} />
-                    <Route path="/login" element={userStatus === 'Anonymous' ? <Login /> : <Navigate to='/messenger' />} />
-                    <Route path="/register" element={userStatus === 'Anonymous' ? <Register /> : <Navigate to='/messenger' />} />
+                    <Route path="/login" element={userStatus === 'Anonymous' ? <Login authenticate={authenticate} /> : <Navigate to='/messenger' />} />
+                    <Route path="/register" element={userStatus === 'Anonymous' ? <Register authenticate={authenticate} /> : <Navigate to='/messenger' />} />
                     {/*<Route path="*" element={</>} />*/}
                 </Routes>
             </BrowserRouter> :
