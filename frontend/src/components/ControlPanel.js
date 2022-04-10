@@ -1,4 +1,5 @@
 import React from 'react';
+import apiClient from '../apiClient';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -11,20 +12,15 @@ function ControlPanel(props) {
     const [foundConversations, setFoundConversations] = React.useState([]);
     const [foundUsers, setFoundUsers] = React.useState([]);
 
-    function search(event) {
+    async function search(event) {
         setSearchText(event.target.value);
-        if (event.target.value === 'ab') {
-            setFoundConversations(['Conversation1 Conversation1', 'Conversation2 Conversation2']);
-            setFoundUsers(['User1 User1', 'User2 User2', 'User3 User3']);
-        }
-        else if (event.target.value === 'abcd') {
-            setFoundConversations(['Conversation3 Conversation3', 'Conversation4 Conversation4', 'Conversation5 Conversation5']);
-            setFoundUsers(['User4 User4', 'User5 User5']);
-        }
-        else {
-            setFoundConversations([]);
-            setFoundUsers([]);
-        };
+        apiClient.get(`search-for-user?search=${event.target.value}`)
+            .then(response => {
+                setFoundUsers(response.data.map((foundUser) => `${foundUser.first_name} ${foundUser.last_name}`));
+            })
+            .catch(error => {
+                setFoundUsers([]);
+            });
     };
 
     function setConversation(conversation) {
