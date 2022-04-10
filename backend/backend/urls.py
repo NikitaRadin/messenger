@@ -6,6 +6,7 @@ from django.views.generic import TemplateView
 
 urlpatterns = [
     path('', include('authorization.urls')),
+    path('', include('communication.urls')),
     path('api-auth/', include('rest_framework.urls')),
     path('admin/', admin.site.urls),
     path('openapi-schema/', get_schema_view(
