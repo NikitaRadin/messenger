@@ -1,11 +1,19 @@
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-from authorization.serializers import LoginSerializer, AuthenticationCodeSerializer, RegisterSerializer
+from authorization.serializers import ProfileSerializer, LoginSerializer, AuthenticationCodeSerializer, RegisterSerializer
 from authorization.models import AuthenticationCode, User
 from . import authentication
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authtoken.models import Token
+
+
+class Profile(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = ProfileSerializer(request.user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class Login(APIView):
