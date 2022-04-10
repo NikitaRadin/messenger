@@ -1,31 +1,34 @@
 import React from 'react';
+import apiClient from '../apiClient';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Messenger from './Messenger';
 import Login from './Login';
 import Register from './Register';
 
 function Router(props) {
-    const [token, setToken] = React.useState('');
+    const [userStatus, setUserStatus] = React.useState('Unknown');
 
     React.useEffect(() => {
-        var token = localStorage.getItem('token');
-        setToken(token);
+        apiClient.get('profile/')
+            .then(response => {
+                setUserStatus('Authenticated');
+            })
+            .catch(error => {
+                setUserStatus('Anonymous');
+            });
     });
 
-    function saveToken(token) {
-        setToken(token);
-        localStorage.setItem('token', token);
-    };
-
     return (
-        <BrowserRouter>
-            <Routes>
-                <Route path="/messenger" element={token ? <Messenger /> : <Navigate to='/login' />} />
-                <Route path="/login" element={!token ? <Login saveToken={saveToken} /> : <Navigate to='/messenger' />} />
-                <Route path="/register" element={!token ? <Register saveToken={saveToken} /> : <Navigate to='/messenger' />} />
-                {/*<Route path="*" element={</>} />*/}
-            </Routes>
-        </BrowserRouter>
+        userStatus !== 'Unknown' ?
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/messenger" element={userStatus === 'Authenticated' ? <Messenger /> : <Navigate to='/login' />} />
+                    <Route path="/login" element={userStatus === 'Anonymous' ? <Login /> : <Navigate to='/messenger' />} />
+                    <Route path="/register" element={userStatus === 'Anonymous' ? <Register /> : <Navigate to='/messenger' />} />
+                    {/*<Route path="*" element={</>} />*/}
+                </Routes>
+            </BrowserRouter> :
+            <></>
     );
 };
 
