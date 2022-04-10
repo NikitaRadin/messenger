@@ -16,7 +16,12 @@ function ControlPanel(props) {
         setSearchText(event.target.value);
         apiClient.get(`search-for-user?search=${event.target.value}`)
             .then(response => {
-                setFoundUsers(response.data.map((foundUser) => `${foundUser.first_name} ${foundUser.last_name}`));
+                setFoundUsers(response.data.map((foundUser) => {
+                    return {
+                        id: foundUser.id,
+                        name: `${foundUser.first_name} ${foundUser.last_name}`
+                    }
+                }));
             })
             .catch(error => {
                 setFoundUsers([]);
@@ -62,7 +67,7 @@ function ControlPanel(props) {
             {
                 !searchText ?
                     <ConversationUserList
-                        conversationUserList={['Name1 Surname1', 'Name2 Surname2', 'Name3 Surname3', 'Name4 Surname4']}
+                        conversationUserList={[{ id: 1, name: 'Name1 Surname1' }, { id: 2, name: 'Name2 Surname2' }, { id: 3, name: 'Name3 Surname3' }, { id: 4, name: 'Name4 Surname4' }]}
                         setConversation={setConversation}
                     /> :
                     <>
