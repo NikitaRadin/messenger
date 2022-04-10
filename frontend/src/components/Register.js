@@ -76,7 +76,7 @@ function Register(props) {
             .then(response => {
                 if (response.status === 200) {
                     response.json().then(jsonResponse => {
-                        props.saveToken(jsonResponse.token);
+                        localStorage.setItem('token', jsonResponse.token);
                         setActiveStep(activeStep + 1);
                         navigate('/messenger');
                     });
