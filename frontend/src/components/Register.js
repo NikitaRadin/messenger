@@ -1,4 +1,5 @@
 import * as React from 'react';
+import apiClient from '../apiClient';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
@@ -27,32 +28,22 @@ function Register(props) {
     const stepHandlers = [sendNewUserInformation, sendAuthenticationCode];
 
     async function sendNewUserInformation() {
-        await fetch('http://127.0.0.1:8000/register/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                'username': username,
-                'first_name': firstName,
-                'last_name': lastName,
-                'email': email
-            })
+        apiClient.post('register/', {
+            username: username,
+            first_name: firstName,
+            last_name: lastName,
+            email: email
         })
             .then(response => {
-                if (response.status === 201) {
-                    response.json().then(jsonResponse => {
-                        setUserId(jsonResponse.user_id);
-                        setActiveStep(activeStep + 1);
-                    });
-                }
-                else {
-                    setSendNewUserInformationError('Failed to create user');
-                    setUsername('');
-                    setFirstName('');
-                    setLastName('');
-                    setEmail('');
-                };
+                setUserId(response.data.user_id);
+                setActiveStep(activeStep + 1);
+            })
+            .catch(error => {
+                setSendNewUserInformationError('Failed to create user');
+                setUsername('');
+                setFirstName('');
+                setLastName('');
+                setEmail('');
             });
     };
 
@@ -63,28 +54,18 @@ function Register(props) {
     function goBack() { };
 
     async function sendAuthenticationCode() {
-        await fetch('http://127.0.0.1:8000/register/', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                'user_id': userId,
-                'code': authenticationCode
-            })
+        apiClient.put('register/', {
+            user_id: userId,
+            code: authenticationCode
         })
             .then(response => {
-                if (response.status === 200) {
-                    response.json().then(jsonResponse => {
-                        props.authenticate(jsonResponse.token);
-                        setActiveStep(activeStep + 1);
-                        navigate('/messenger');
-                    });
-                }
-                else {
-                    setSendAuthenticationCodeError('Invalid authentication code');
-                    setAuthenticationCode('');
-                };
+                props.authenticate(response.data.token);
+                setActiveStep(activeStep + 1);
+                navigate('/messenger');
+            })
+            .catch(error => {
+                setSendAuthenticationCodeError('Invalid authentication code');
+                setAuthenticationCode('');
             });
     };
 
