@@ -1,4 +1,5 @@
 import * as React from 'react';
+import apiClient from '../apiClient';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
@@ -24,24 +25,16 @@ function Login(props) {
     const stepHandlers = [sendUsername, sendAuthenticationCode];
 
     async function sendUsername() {
-        await fetch('http://127.0.0.1:8000/login/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ 'username': username })
+        apiClient.post('login/', {
+            username: username
         })
             .then(response => {
-                if (response.status === 200) {
-                    response.json().then(jsonResponse => {
-                        setUserId(jsonResponse.user_id);
-                        setActiveStep(activeStep + 1);
-                    });
-                }
-                else {
-                    setSendUsernameError(`User ${username} not found`);
-                    setUsername('');
-                };
+                setUserId(response.data.user_id);
+                setActiveStep(activeStep + 1);
+            })
+            .catch(error => {
+                setSendUsernameError(`User ${username} not found`);
+                setUsername('');
             });
     };
 
@@ -52,28 +45,18 @@ function Login(props) {
     function goBack() { };
 
     async function sendAuthenticationCode() {
-        await fetch('http://127.0.0.1:8000/login/', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                'user_id': userId,
-                'code': authenticationCode
-            })
+        apiClient.put('login/', {
+            user_id: userId,
+            code: authenticationCode
         })
             .then(response => {
-                if (response.status === 200) {
-                    response.json().then(jsonResponse => {
-                        props.authenticate(jsonResponse.token);
-                        setActiveStep(activeStep + 1);
-                        navigate('/messenger');
-                    });
-                }
-                else {
-                    setSendAuthenticationCodeError('Invalid authentication code');
-                    setAuthenticationCode('');
-                };
+                props.authenticate(response.data.token);
+                setActiveStep(activeStep + 1);
+                navigate('/messenger');
+            })
+            .catch(error => {
+                setSendAuthenticationCodeError('Invalid authentication code');
+                setAuthenticationCode('');
             });
     };
 
