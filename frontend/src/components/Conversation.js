@@ -4,8 +4,12 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Message from './Message';
 import SendMessageForm from './SendMessageForm';
+import Button from '@mui/material/Button';
 
 function Conversation(props) {
+    if (!props.conversation.conversation_id && !props.conversation.user_id) {
+        return <></>
+    };
     return (
         <>
             <AppBar sx={{
@@ -13,7 +17,7 @@ function Conversation(props) {
                 left: `${props.left}%`
             }}>
                 <Toolbar>
-                    <Typography variant="h6">{props.conversation}</Typography>
+                    <Typography variant="h6">{props.conversation.name}</Typography>
                 </Toolbar>
             </AppBar>
             <Box sx={{
@@ -30,9 +34,15 @@ function Conversation(props) {
                 position: 'fixed',
                 left: `${props.left + props.indent}%`,
                 right: `${props.indent}%`,
-                bottom: `${props.indent}%`
+                bottom: `${props.indent}%`,
+                display: `${props.conversation.conversation_id ? '' : 'flex'}`,
+                justifyContent: `${props.conversation.conversation_id ? '' : 'center'}`
             }}>
-                <SendMessageForm sendMessage={props.sendMessage} />
+                {
+                    props.conversation.conversation_id ?
+                        <SendMessageForm sendMessage={props.sendMessage} /> :
+                        <Button>Start conversation</Button>
+                }
             </Box>
         </>
     );

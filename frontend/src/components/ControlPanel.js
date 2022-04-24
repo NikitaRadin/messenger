@@ -18,8 +18,9 @@ function ControlPanel(props) {
             .then(response => {
                 setFoundUsers(response.data.map((foundUser) => {
                     return {
-                        id: foundUser.id,
-                        name: `${foundUser.first_name} ${foundUser.last_name}`
+                        conversation_id: null,
+                        name: `${foundUser.first_name} ${foundUser.last_name}`,
+                        user_id: foundUser.id
                     }
                 }));
             })
@@ -28,11 +29,11 @@ function ControlPanel(props) {
             });
     };
 
-    function setConversation(conversation) {
-        props.setConversation(conversation);
+    function changeConversation(conversation) {
         setSearchText('');
         setFoundConversations([]);
         setFoundUsers([]);
+        props.changeConversation(conversation);
     };
 
     const Aligner = styled('div')(({ theme }) => ({
@@ -67,8 +68,14 @@ function ControlPanel(props) {
             {
                 !searchText ?
                     <ConversationUserList
-                        conversationUserList={[{ id: 1, name: 'Name1 Surname1' }, { id: 2, name: 'Name2 Surname2' }, { id: 3, name: 'Name3 Surname3' }, { id: 4, name: 'Name4 Surname4' }]}
-                        setConversation={setConversation}
+                        conversationUserList={[
+                            { conversation_id: 1, name: 'Name1 Surname1', user_id: null },
+                            { conversation_id: 2, name: 'Name2 Surname2', user_id: null },
+                            { conversation_id: 3, name: 'Name3 Surname3', user_id: null },
+                            { conversation_id: null, name: 'Name4 Surname4', user_id: 2 },
+                            { conversation_id: null, name: 'Name5 Surname5', user_id: 4 }
+                        ]}
+                        changeConversation={props.changeConversation}
                     /> :
                     <>
                         <Aligner>
@@ -78,7 +85,7 @@ function ControlPanel(props) {
                         </Aligner>
                         <ConversationUserList
                             conversationUserList={foundConversations}
-                            setConversation={setConversation}
+                            changeConversation={changeConversation}
                         />
                         <Aligner>
                             <Divider textAlign="left">
@@ -87,7 +94,7 @@ function ControlPanel(props) {
                         </Aligner>
                         <ConversationUserList
                             conversationUserList={foundUsers}
-                            setConversation={setConversation}
+                            changeConversation={changeConversation}
                         />
                     </>
             }
