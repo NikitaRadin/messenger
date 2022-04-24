@@ -9,8 +9,13 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'first_name', 'last_name']
 
 
+class ConversationUsersField(serializers.PrimaryKeyRelatedField):
+    def to_representation(self, value):
+        return value.username
+
+
 class ConversationSerializer(serializers.ModelSerializer):
-    users = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=True)
+    users = ConversationUsersField(queryset=User.objects.all(), many=True)
 
     class Meta:
         model = Conversation
