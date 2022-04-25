@@ -9,10 +9,12 @@ from django.http import Http404
 
 class SearchForUser(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
-    queryset = User.objects.all()
     serializer_class = UserSerializer
     filter_backends = [SearchFilter]
     search_fields = ['^first_name', '^last_name']
+
+    def get_queryset(self):
+        return User.objects.exclude(id=self.request.user.id)
 
 
 class Conversations(viewsets.ModelViewSet):

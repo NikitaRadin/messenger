@@ -26,7 +26,7 @@ function Messenger(props) {
                 .then(response => {
                     setConversation({
                         conversation_id: response.data.id,
-                        name: conversation.name,
+                        name: response.data.name,
                         user_id: null
                     });
                 })

@@ -17,7 +17,7 @@ function Router(props) {
             .catch(error => {
                 setUserStatus('Anonymous');
             });
-    });
+    }, []);
 
     function authenticate(token) {
         localStorage.setItem('token', token);

@@ -8,7 +8,8 @@ function ConversationUserList(props) {
     return (
         <List>
             {props.conversationUserList.map((conversation, index) => (
-                <ListItem button onClick={(event) => props.changeConversation(conversation)} key={conversation.id}>
+                <ListItem button onClick={(event) => props.changeConversation(conversation)}
+                    key={conversation.conversation_id || conversation.user_id}>
                     <ListItemAvatar>
                         <Avatar>NS</Avatar>
                     </ListItemAvatar>
