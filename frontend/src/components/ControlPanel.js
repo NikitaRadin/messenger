@@ -8,24 +8,9 @@ import Divider from '@mui/material/Divider';
 import Chip from '@mui/material/Chip';
 
 function ControlPanel(props) {
-    const [conversations, setConversations] = React.useState([]);
     const [searchText, setSearchText] = React.useState('');
     const [foundConversations, setFoundConversations] = React.useState([]);
     const [foundUsers, setFoundUsers] = React.useState([]);
-
-    React.useEffect(() => {
-        apiClient.get('conversations/')
-            .then(response => {
-                setConversations(response.data.map((conversation) => {
-                    return {
-                        conversation_id: conversation.id,
-                        name: conversation.name,
-                        user_id: null
-                    }
-                }));
-            })
-            .catch(error => { });
-    }, []);
 
     async function search(event) {
         setSearchText(event.target.value);
@@ -83,7 +68,7 @@ function ControlPanel(props) {
             {
                 !searchText ?
                     <ConversationUserList
-                        conversationUserList={conversations}
+                        conversationUserList={props.conversations}
                         changeConversation={props.changeConversation}
                     /> :
                     <>

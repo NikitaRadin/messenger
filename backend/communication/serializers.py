@@ -21,3 +21,11 @@ class ConversationSerializer(serializers.ModelSerializer):
         current_user = self.context['request'].user
         interlocutor = obj.users.exclude(id=current_user.id).get()
         return f'{interlocutor.username} ({interlocutor.first_name} {interlocutor.last_name})'
+
+    def create(self, validated_data):
+        conversation = Conversation()
+        conversation.save()
+        conversation.users.set(validated_data['users'])
+        current_user = self.context['request'].user
+        conversation.users.add(current_user)
+        return conversation

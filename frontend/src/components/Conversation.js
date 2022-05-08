@@ -1,3 +1,4 @@
+import apiClient from '../apiClient';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -10,6 +11,21 @@ function Conversation(props) {
     if (!props.conversation.conversation_id && !props.conversation.user_id) {
         return <></>
     };
+
+    async function startConversation() {
+        apiClient.post('conversations/', {
+            users: [props.conversation.user_id]
+        })
+            .then(response => {
+                props.startConversation({
+                    conversation_id: response.data.id,
+                    name: response.data.name,
+                    user_id: null
+                });
+            })
+            .catch(error => { });
+    };
+
     return (
         <>
             <AppBar sx={{
@@ -41,7 +57,7 @@ function Conversation(props) {
                 {
                     props.conversation.conversation_id ?
                         <SendMessageForm sendMessage={props.sendMessage} /> :
-                        <Button>Start conversation</Button>
+                        <Button onClick={startConversation}>Start conversation</Button>
                 }
             </Box>
         </>
