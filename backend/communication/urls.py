@@ -1,5 +1,5 @@
 from django.urls import path
-from communication.views import SearchForUser, Conversations
+from communication.views import SearchForUser, Conversations, Messages
 
 
 urlpatterns = [
@@ -10,5 +10,9 @@ urlpatterns = [
     })),
     path('conversations/<int:user_id>/', Conversations.as_view({
         'get': 'retrieve'
+    })),
+    path('messages/<int:conversation_id>/', Messages.as_view({
+        'get': 'list',
+        'post': 'create'
     }))
 ]

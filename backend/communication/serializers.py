@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from communication.models import Conversation
+from communication.models import Conversation, Message
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -29,3 +29,15 @@ class ConversationSerializer(serializers.ModelSerializer):
         current_user = self.context['request'].user
         conversation.users.add(current_user)
         return conversation
+
+
+class MessageSerializer(serializers.ModelSerializer):
+    is_incoming = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = Message
+        fields = ['is_incoming', 'text', 'date_time', 'read']
+
+    def get_is_incoming(self, obj):
+        current_user = self.context['request'].user
+        return obj.from_user != current_user
